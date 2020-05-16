@@ -62,7 +62,7 @@ def create_full_html_string(n=6):
 def create_video_html():
     html = create_full_html_string()
 
-    with open('/usr/local/airflow/dags/portfolio/template.html', 'r') as f:
+    with open('/root/airflow/dags/portfolio/template.html', 'r') as f:
         template = f.read()
 
     final_html = template.format(**dict(statsworks_posts=html))
@@ -84,7 +84,7 @@ def update_webpage():
     html = bs4.BeautifulSoup(html, 'html.parser').prettify()
 
     html = clean_prettified(html)
-    with open('/usr/local/airflow/dags/portfolio/index.html', 'w') as f:
+    with open('/root/airflow/dags/portfolio/index.html', 'w') as f:
         f.write(html)
 
 

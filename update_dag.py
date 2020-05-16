@@ -11,6 +11,6 @@ dag = DAG('update_portfolio',
 
 update_html = PythonOperator(update_webpage, dag=dag)
 commit_dag = BashOperator(
-    'git add . && git commit -m "update based on new statsworks entry" && git push', dag=dag)
+    'cd /root/airflow/dags/portfolio && git add . && git commit -m "update based on new statsworks entry" && git push', dag=dag)
 
 update_html >> commit_dag
