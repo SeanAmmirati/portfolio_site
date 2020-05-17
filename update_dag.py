@@ -2,6 +2,8 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
+from airflow.operators.subdag_operator import SubDagOperator
+from airflow.executors.sequential_executor import SequentialExecutor
 
 import bs4
 import requests
@@ -95,19 +97,31 @@ def update_webpage():
         f.write(html)
 
 
-dag = DAG('update_portfolio',
-          description='Updates Website portion of portfolio with most recent posts',
-          schedule_interval='0 12 * * *',
-          start_date=datetime(2020, 5, 16), catchup=False)
+main_dag = DAG('main_dag',
+               description='Full DAG to update Website portion of portfolio website',
+               schedule_interval='0 12 * * *',
+               start_date=datetime(2020, 5, 16), catchup=False)
+# made into subdag to ensure done on the same system
+subdag = DAG('update_portfolio',
+             description='Updates Website portion of portfolio with most recent posts',
+             schedule_interval='0 12 * * *',
+             start_date=datetime(2020, 5, 16), catchup=False)
 
 pull_any_changes = BashOperator(
     task_id='pull', bash_command='cd /home/pi/airflow/dags && git submodule update --recursive --remote --merge',
-    dag=dag
+    dag=subdag
 )
 update_html = PythonOperator(
-    task_id='update_html', python_callable=lambda: update_webpage(), dag=dag)
+    task_id='update_html', python_callable=lambda: update_webpage(), dag=subdag)
 commit_dag = BashOperator(
     task_id='push_changes',
-    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site &&git add . && git diff-index --quiet HEAD || git commit -m "update based on new statsworks entry" && git push', dag=dag)
+    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site &&git add . && git diff-index --quiet HEAD || git commit -m "update based on new statsworks entry" && git push', dag=subdag)
 
 pull_any_changes >> update_html >> commit_dag
+
+task = SubDagOperator(
+    task_id='update_portfolio',
+    subdag=subdag,
+    executor=SequentialExecutor(),
+    dag=main_dag
+)
