@@ -102,7 +102,7 @@ main_dag = DAG('main_dag',
                schedule_interval='0 12 * * *',
                start_date=datetime(2020, 5, 16), catchup=False)
 # made into subdag to ensure done on the same system
-subdag = DAG('update_portfolio',
+subdag = DAG('main_dag.update_portfolio',
              description='Updates Website portion of portfolio with most recent posts',
              schedule_interval='0 12 * * *',
              start_date=datetime(2020, 5, 16), catchup=False)
@@ -120,7 +120,7 @@ commit_dag = BashOperator(
 pull_any_changes >> update_html >> commit_dag
 
 task = SubDagOperator(
-    task_id='main_dag.update_portfolio',
+    task_id='adupdate_portfolio',
     subdag=subdag,
     executor=SequentialExecutor(),
     dag=main_dag
