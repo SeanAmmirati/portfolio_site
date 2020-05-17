@@ -99,13 +99,13 @@ def update_webpage():
 
 main_dag = DAG('full_update_portfolio',
                description='Full DAG to update Website portion of portfolio website',
-               schedule_interval='0 12 * * *',
+               schedule_interval=None,
                start_date=datetime(2020, 5, 16), catchup=False)
 # made into subdag to ensure done on the same system
 subdag = DAG('full_update_portfolio.update_seq',
              description='Updates Website portion of portfolio with most recent posts',
-             schedule_interval='0 12 * * *',
-             start_date=datetime(2020, 5, 16), catchup=False)
+             schedule_interval=main_dag.schedule_interval,
+             start_date=main_dag.start_date, catchup=False)
 
 pull_any_changes = BashOperator(
     task_id='pull', bash_command='cd /home/pi/airflow/dags && git submodule update --recursive --remote --merge',
