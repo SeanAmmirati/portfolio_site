@@ -42,7 +42,7 @@ def get_top_n_articles(n=6, img_only=True):
 
 
 def html_string(link, img, title, desc, time):
-    return f'''<div class="col-12 col-sm-8 col-lg-4">
+    return '''<div class="col-12 col-sm-8 col-lg-4">
                   <div class="card single-post"><a class="post-img" href="{link}"><img class="card-img-top" src="{img}" alt="StatsWorks post" style="background-color:white;"><span class="content-date">{time}</span></a>
                     <div class="card-body post-content"><a href="{link}">
                         <h5 class="card-title content-title">{title}</h5>
@@ -50,7 +50,8 @@ def html_string(link, img, title, desc, time):
                       <p class="card-text content-description">{desc}</p>
                     </div>
                   </div>
-                </div>'''
+                </div>'''.format(**dict(link=link, img=img, title=title,
+                                        desc=desc, time=time))
 
 
 def create_full_html_string(n=6):
