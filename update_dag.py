@@ -99,7 +99,7 @@ def update_webpage():
 
 main_dag = DAG('full_update_portfolio',
                description='Full DAG to update Website portion of portfolio website',
-               schedule_interval=None,
+               schedule_interval="@hourly",
                start_date=datetime(2020, 5, 16), catchup=False)
 # made into subdag to ensure done on the same system
 subdag = DAG('full_update_portfolio.update_seq',
