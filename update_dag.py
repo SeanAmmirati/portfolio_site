@@ -86,8 +86,7 @@ def clean_prettified(html):
 
 
 def update_webpage():
-    import pdb
-    pdb.set_trace()
+
     html = create_video_html()
     html = bs4.BeautifulSoup(html, 'html.parser').prettify()
 
@@ -102,7 +101,7 @@ dag = DAG('update_portfolio',
           start_date=datetime(2020, 5, 16), catchup=False)
 
 update_html = PythonOperator(
-    task_id='update_html', python_callable=update_webpage, dag=dag)
+    task_id='update_html', python_callable=lambda: update_webpage, dag=dag)
 # commit_dag = BashOperator(
 #    task_id='push_changes',
 #    bash_command='cd /root/airflow/dags/portfolio && git add . && git commit -m "update based on new statsworks entry" && git push', dag=dag)
