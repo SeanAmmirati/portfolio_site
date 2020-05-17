@@ -93,7 +93,7 @@ def update_webpage():
     html = bs4.BeautifulSoup(html, 'html.parser').prettify()
 
     html = clean_prettified(html)
-    with open('/home/pi/airflow/dags/portfolio/index.html', 'w') as f:
+    with open('/home/pi/airflow/dags/portfolio/portfolio_site/index.html', 'w') as f:
         f.write(html)
 
 
