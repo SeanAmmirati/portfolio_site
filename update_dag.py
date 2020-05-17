@@ -100,10 +100,14 @@ dag = DAG('update_portfolio',
           schedule_interval='0 12 * * *',
           start_date=datetime(2020, 5, 16), catchup=False)
 
+pull_any_changes = BashOperator(
+    task_id='pull', bash_command='cd / home/pi/airflow/dags && git submodule update --recursive --remote --merge',
+    dag=dag
+)
 update_html = PythonOperator(
     task_id='update_html', python_callable=lambda: update_webpage(), dag=dag)
 commit_dag = BashOperator(
     task_id='push_changes',
-    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site && git pull &&git add . && git commit -m "update based on new statsworks entry" && git push', dag=dag)
+    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site &&git add . && git diff-index --quiet HEAD | git commit -m "update based on new statsworks entry" && git push', dag=dag)
 
-update_html >> commit_dag
+pull_any_changes >> update_html >> commit_dag
