@@ -120,7 +120,7 @@ commit_dag = BashOperator(
 pull_any_changes >> update_html >> commit_dag
 
 task = SubDagOperator(
-    task_id='adupdate_portfolio',
+    task_id='update_portfolio',
     subdag=subdag,
     executor=SequentialExecutor(),
     dag=main_dag
