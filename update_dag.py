@@ -68,7 +68,7 @@ def create_full_html_string(n=6):
 def create_video_html():
     html = create_full_html_string()
 
-    with open('/home/pi/airflow/dags/portfolio/template.html', 'r') as f:
+    with open('/home/pi/airflow/dags/portfolio/portfolio_template/template.html', 'r') as f:
         template = f.read()
 
     final_html = template.format(**dict(statsworks_posts=html))
