@@ -101,7 +101,7 @@ dag = DAG('update_portfolio',
           start_date=datetime(2020, 5, 16), catchup=False)
 
 pull_any_changes = BashOperator(
-    task_id='pull', bash_command='cd / home/pi/airflow/dags && git submodule update --recursive --remote --merge',
+    task_id='pull', bash_command='cd /home/pi/airflow/dags && git submodule update --recursive --remote --merge',
     dag=dag
 )
 update_html = PythonOperator(
