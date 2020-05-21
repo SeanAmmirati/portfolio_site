@@ -1108,11 +1108,10 @@ hr {
     -o-object-fit: cover;
     border-radius: 50%;
     display: block;
-    height: 250px;
     margin: 0 auto 40px auto;
     object-fit: cover;
-    width: 250px;
-    min-height: 250px;
+    min-width: 350px;
+    min-height: 450px;
   }
 
   #about .info-section .info-content .content-subtitle {
