@@ -115,7 +115,7 @@ update_html = PythonOperator(
     task_id='update_html', python_callable=lambda: update_webpage(), dag=subdag)
 commit_dag = BashOperator(
     task_id='push_changes',
-    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site &&git add . && git diff-index --quiet HEAD || git commit -m "update based on new statsworks entry" && git push', dag=subdag)
+    bash_command='cd /home/pi/airflow/dags/portfolio/portfolio_site && git checkout master &&git add . && git diff-index --quiet HEAD || git commit -m "update based on new statsworks entry" && git push', dag=subdag)
 
 pull_any_changes >> update_html >> commit_dag
 
