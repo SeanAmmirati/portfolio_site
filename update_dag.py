@@ -124,6 +124,5 @@ pull_any_changes >> update_html >> commit_dag
 task = SubDagOperator(
     task_id='update_seq',
     subdag=subdag,
-    executor=SequentialExecutor(),
     dag=main_dag
 )
